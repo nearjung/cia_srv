@@ -1,0 +1,21 @@
+{
+  "name": "anime_server",
+  "version": "1.0.0",
+  "description": "Anime server-side",
+  "main": "start.js",
+  "scripts": {
+    "test": "test\\"
+  },
+  "author": "Marvis, Mr.Rambo",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "log4js": "^6.1.2",
+    "mssql": "^6.1.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.5",
+    "sequelize-cli": "^5.5.1"
+  }
+}
