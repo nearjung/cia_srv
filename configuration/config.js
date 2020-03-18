@@ -6,7 +6,17 @@ const config = {
         user: "sa",
         password: "142536As",
         server: "DESKTOP-IRSA0B8", 
-        database: "ciadb" 
+        database: "ciadb",
+        connectionTimeout: 300000,
+        requestTimeout: 300000,
+        pool: {
+            idleTimeoutMillis: 300000,
+            max: 100
+        },
+        options: {
+            "enableArithAbort": true,
+            encrypt: true
+        }
     },
     table:{
         census: "[ciadb].[dbo].[Census_10P]",

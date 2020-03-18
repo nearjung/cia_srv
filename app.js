@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 /** User */
 var index_route = require('./routes/index_route');
 var personal = require('./routes/personal_route');
+var api = require('./routes/api_route');
 
 
 /** Configuration */
@@ -31,6 +32,7 @@ app.use("/public",express.static(path.resolve(__dirname, 'public')));
 /** System Routes */
 app.use('/', index_route);
 app.use('/personal', personal);
+app.use('/api', api);
 
 
 

@@ -2,20 +2,19 @@ var serviceResult = require('../../model/serviceResult');
 const log = require('../../configuration/log/log');
 var sql = require("mssql");
 var db = require('../../configuration/config');
-const get = async (req, res, next)=>{
+const get = async (req, res, next) => {
     try {
-        var name = req.query.name;
-        var idcard = req.query.idcard;
+        var searchTxt = req.query.searchTxt;
 
-        sql.connect(db.connect, (err)=>{
+        sql.connect(db.connect, (err) => {
             if (err) {
                 console.log(err);
             }
             var request = new sql.Request();
             var command = "";
-            command += "SELECT * FROM Census_10P";
-            command += " WHERE Name LIKE '%"+ name +"%' OR IDCard LIKE '%"+ idcard +"%'";
-            request.query(command, (err, result)=>{
+            command += "SELECT * FROM " + db.table.census + "";
+            command += " WHERE Name LIKE '%" + searchTxt + "%' OR IDCard LIKE '%" + searchTxt + "%'";
+            request.query(command, (err, result) => {
                 if (err) {
                     console.log(err);
                     serviceResult.code = 500;
@@ -41,4 +40,27 @@ const get = async (req, res, next)=>{
     }
 }
 
-module.exports = {get};
+const getPersonal = (req, res, next) => {
+    try {
+        var IDCard = req.query.idcard;
+        if (IDCard) {
+            sql.connect(db.connect, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+                var request = new sql.Request();
+                var sql = "";
+                sql += "";
+            })
+        }
+    } catch (err) {
+        console.error(err);
+        log.error(err.stack);
+        serviceResult.code = 500;
+        serviceResult.status = "Error";
+        serviceResult.text = "Error: " + err.message;
+        res.json(serviceResult);
+    }
+}
+
+module.exports = { get, getPersonal };

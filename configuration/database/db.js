@@ -18,6 +18,5 @@ const db = new Sequelize(config.db.cfg_db, config.db.cfg_db_user, config.db.cfg_
     }
 });
 
-
-module.exports = db;
+module.exports = db, db_conf;
 
