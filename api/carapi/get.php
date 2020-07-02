@@ -11,6 +11,12 @@ $return = "";
 $log = "";
 // Query back
 
+$log = array(
+    'PLATE1' => $plate1,
+    'PLATE2' => $plate2,
+    'PROVINCE' => $province,
+    'createDate' => $datetimes
+);
 $cer_sql = $sql->prepare("SELECT cert_key FROM trcertification WHERE cert_key = :cer");
 $cer_sql->BindParam(":cer", $certification);
 $cer_sql->execute();
@@ -45,12 +51,6 @@ if($cer) {
         );
         echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         
-        $log = array(
-            'PLATE1' => $plate1,
-            'PLATE2' => $plate2,
-            'PROVINCE' => $province,
-            'createDate' => $datetimes
-        );
         $api->sendLog($certification, json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         exit();
     } else {
