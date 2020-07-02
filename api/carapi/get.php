@@ -24,6 +24,7 @@ if($cer) {
             'text' => "ไม่สามารถใช้งานบริการได้เนื่องจากเกินจำนวนสิทธิ์"
         );
         echo json_encode($return);
+        $api->sendLog($certification, json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 'ERR');
         exit();
     }
     
@@ -61,6 +62,7 @@ if($cer) {
             'text' => "Error: Invalid data."
         );
         echo json_encode($return);
+        $api->sendLog($certification, json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 'ERR');
         exit();
     }
 } else {
@@ -71,6 +73,7 @@ if($cer) {
         'text' => "Error: Invalid certification."
     );
     echo json_encode($return);
+    $api->sendLog($certification, json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 'ERR');
     exit();
 }
 

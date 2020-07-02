@@ -4,22 +4,28 @@ header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
 
 $membId = $_GET['membId'];
-$searchTxt = $_GET['searchTxt'];
+$firstname = $_GET['firstname'];
+$lastname = $_GET['lastname'];
 // Query back
 $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
-$fnd_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.censusSearch :searchTxt");
-$fnd_sql->BindParam(":searchTxt", $searchTxt);
+$fnd_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.censusSearch2 :firstname, :lastname");
+$fnd_sql->BindParam(":firstname", $firstname);
+$fnd_sql->BindParam(":lastname", $lastname);
 $fnd_sql->execute();
-while($result = $fnd_sql->fetch(PDO::FETCH_ASSOC)) {
+while ($result = $fnd_sql->fetch(PDO::FETCH_ASSOC)) {
     $return['value'][] = $result;
-} 
+}
 $return['comment'] = "";
-
-$api->sendLogUser($membId, $api->logData('ค้นหาบุคคล', 'คำค้นหา '.$searchTxt.''));
 
 echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
+if ($result) {
+    $api->sendLogUser($membId, $api->logData('ค้นหาบุคคล', 'คำค้นหา ' . $firstname . ' ' . $lastname . ' '));
+} else {
+    $api->sendLogUser($membId, $api->logData('ค้นหาบุคคล', 'คำค้นหา ' . $firstname . ' ' . $lastname . ' '), 'ERR');
+}
+exit();
 ?>

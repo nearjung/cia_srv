@@ -1,11 +1,12 @@
 <?php
 class API {
-    public function sendLog($cert_id, $data) {
+    public function sendLog($cert_id, $data, $status = 'OK') {
         global $sql, $datetimes, $mssql_db_user;
-        $log_sql = $sql->prepare("INSERT INTO ".$mssql_db_user.".dbo.trlogapi(cert_code, data, createDate) VALUES(:cer, :data, :crDate)");
+        $log_sql = $sql->prepare("INSERT INTO ".$mssql_db_user.".dbo.trlogapi(cert_code, data, createDate, status) VALUES(:cer, :data, :crDate, :status)");
         $log_sql->BindParam(":cer", $cert_id);
         $log_sql->BindParam(":data", $data);
         $log_sql->BindParam(":crDate", $datetimes);
+        $log_sql->BindParam(":status", $status);
         $log_sql->execute();
     }
 
@@ -70,12 +71,13 @@ class API {
         }
     }
 
-    public function sendLogUser($memberId, $data) {
+    public function sendLogUser($memberId, $data, $status = 'OK') {
         global $sql, $mssql_db_user, $datetimes;
-        $log_sql = $sql->prepare("INSERT INTO ".$mssql_db_user.".dbo.trlogevent(member_id, data, createDate) VALUES(:memId, :data, :createDate)");
+        $log_sql = $sql->prepare("INSERT INTO ".$mssql_db_user.".dbo.trlogevent(member_id, data, createDate, status) VALUES(:memId, :data, :createDate, :status)");
         $log_sql->BindParam(":memId", $memberId);
         $log_sql->BindParam(":data", $data);
         $log_sql->BindParam(":createDate", $datetimes);
+        $log_sql->BindParam(":status", $status);
         $log_sql->execute();
         if($log_sql) {
             return true;

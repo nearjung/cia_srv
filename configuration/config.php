@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 0);
 ini_set('memory_limit', '-1');
 error_reporting(E_ALL);
 // SQL Server
-$mssql_host	=	"192.168.69.113"; // ชื่อโฮส SQL
+$mssql_host	=	"171.99.203.126"; // ชื่อโฮส SQL
 $mssql_user	=	"sa"; // ชื่อยูสเซอร์ SQL
 $mssql_pass	=	"P@ssw0rd"; // รหัสผ่าน SQL
 $mssql_db_user	=	"cia_db"; // ชื่อฐานข้อมูลที่ใช้เก็บ User
