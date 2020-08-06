@@ -21,7 +21,6 @@ $top = $_GET['top'];
 $getCount = $_GET['getcount'];
 $memberId = $api->getMember($_GET['memberId'], $_GET['password'], "member_id");
 $credit = $api->getMember($_GET['memberId'], $_GET['password'], "credit");
-$price = $api->getMenu(5, "menuPrice");
 
 $i = 0;
 
@@ -34,7 +33,8 @@ if ($memberId == false) {
         'text' => "Error: Invalid user."
     );
     echo json_encode($return);
-
+    $api->sendLogUser($memberId, $api->logData('ดูข้อมูล Search Tools Personal', 'Error: Invalid user.'), 'ERR');
+    return;
 } else {
     $return['id'] = '';
     $return['code'] = 200;
@@ -63,5 +63,5 @@ if ($memberId == false) {
     $return['comment'] = "";
 }
 echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-$api->sendLogUser($memberId, $api->logData('ดูข้อมูล', 'Search tools used.'));
+$api->sendLogUser($memberId, $api->logData('ดูข้อมูล Search Tools Personal', 'Search tools used.'));
 ?>
