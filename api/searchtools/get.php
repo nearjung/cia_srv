@@ -21,6 +21,7 @@ $top = $_GET['top'];
 $getCount = $_GET['getcount'];
 $memberId = $api->getMember($_GET['memberId'], $_GET['password'], "member_id");
 $credit = $api->getMember($_GET['memberId'], $_GET['password'], "credit");
+$price = $api->getMenu(5, "menuPrice");
 
 $i = 0;
 
