@@ -27,7 +27,7 @@ if($auth) {
         echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit();
     } else {
-        $menu_sql = $sql->prepare("SELECT trmenu.* FROM trmenu INNER JOIN trmenuactive ON trmenu.menuId = trmenuactive.menuId AND trmenuactive.member_id = :memid ORDER BY menuId");
+        $menu_sql = $sql->prepare("SELECT trmenu.* FROM trmenu INNER JOIN trmenuactive ON trmenu.menuId = trmenuactive.menuId AND trmenuactive.member_id = :memid AND trmenu.menuRole != 'System' ORDER BY menuId");
         $menu_sql->BindParam(":memid", $member);
         $menu_sql->execute();
         while($menu = $menu_sql->fetch(PDO::FETCH_ASSOC)) {
