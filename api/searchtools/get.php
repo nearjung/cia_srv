@@ -19,6 +19,8 @@ $email = $_GET['email'];
 $telephone = $_GET['telephone'];
 $top = $_GET['top'];
 $getCount = $_GET['getcount'];
+$carbrand =  $_GET['carbrand'];
+$carmodel = $_GET['carmodel'];
 $memberId = $api->getMember($_GET['memberId'], $_GET['password'], "member_id");
 $credit = $api->getMember($_GET['memberId'], $_GET['password'], "credit");
 
@@ -41,7 +43,8 @@ if ($memberId == false) {
     $return['status'] = "Success";
     $return['text'] = "Load Success.";
     
-    $back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.searchTools :top, :getcount, :gender, :age1, :age2, :province, :amphure, :tambon, :car, :yearcar, :ensure, :email, :telephone");
+    $back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.searchTools :top, :getcount, :gender, :age1, :age2, :province, :amphure, :tambon, :car, :yearcar, :ensure, :email, :telephone
+    :carbrand, :carmodel");
     $back_sql->BindParam(":top", $top);
     $back_sql->BindParam(":getcount", $getCount);
     $back_sql->BindParam(":gender", $gender);
@@ -55,6 +58,8 @@ if ($memberId == false) {
     $back_sql->BindParam(":ensure", $ensure);
     $back_sql->BindParam(":email", $email);
     $back_sql->BindParam(":telephone", $telephone);
+    $back_sql->BindParam(":carbrand", $carbrand);
+    $back_sql->BindParam(":carmodel", $carmodel);
     $back_sql->execute();
     while ($back = $back_sql->fetch(PDO::FETCH_ASSOC)) {
         $return['value'][] = $back;
