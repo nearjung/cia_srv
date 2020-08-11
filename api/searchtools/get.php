@@ -43,8 +43,7 @@ if ($memberId == false) {
     $return['status'] = "Success";
     $return['text'] = "Load Success.";
     
-    $back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.searchTools :top, :getcount, :gender, :age1, :age2, :province, :amphure, :tambon, :car, :yearcar, :ensure, :email, :telephone
-    :carbrand, :carmodel");
+    $back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.searchTools :top, :getcount, :gender, :age1, :age2, :province, :amphure, :tambon, :car, :yearcar, :ensure, :email, :telephone, :carbrand, :carmodel");
     $back_sql->BindParam(":top", $top);
     $back_sql->BindParam(":getcount", $getCount);
     $back_sql->BindParam(":gender", $gender);
