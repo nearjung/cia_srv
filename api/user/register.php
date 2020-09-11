@@ -9,6 +9,7 @@ $titleName = $_GET['titleName'];
 $fullName = $_GET['fullName'];
 $idCard = $_GET['idCard'];
 $telephone = $_GET['telephone'];
+$token = $_GET['token'];
 
 $name = explode(" ", $fullName);
 $auth = "Memb";
@@ -30,7 +31,7 @@ if($chk) {
 } else {
         // Register
     $register_sql = $sql->prepare("INSERT INTO ".$mssql_db_user.".dbo.trmember(email, password, titleName, firstName, lastName, idcard
-    , telephone, authority, createDate) VALUES(:p1, :p2, :p3, :p4, :p5, :p6, :p7, :p8, :p9)");
+    , telephone, authority, createDate, token) VALUES(:p1, :p2, :p3, :p4, :p5, :p6, :p7, :p8, :p9, :p10)");
     $register_sql->BindParam(":p1", $email);
     $register_sql->BindParam(":p2", $pass);
     $register_sql->BindParam(":p3", $titleName);
@@ -40,6 +41,7 @@ if($chk) {
     $register_sql->BindParam(":p7", $telephone);
     $register_sql->BindParam(":p8", $auth);
     $register_sql->BindParam(":p9", $createDate);
+    $register_sql->BindParam(":p10", $token);
     $register_sql->execute();
     if($register_sql) {
         $return = array(
