@@ -18,7 +18,7 @@ $auth = $auth_sql->fetch(PDO::FETCH_ASSOC);
 if($auth) {
     // GET Menu
     if($auth['authority'] == "Admin") {
-        $menu_sql = $sql->prepare("SELECT * FROM trmenu");
+        $menu_sql = $sql->prepare("SELECT * FROM trmenu WHERE trmenu.menuRole != 'System'");
         $menu_sql->execute();
         while($menu = $menu_sql->fetch(PDO::FETCH_ASSOC)) {
             $return['value'][] = $menu;
