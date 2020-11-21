@@ -9,7 +9,7 @@ $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
-$back_sql = $sql->prepare("SELECT member_id, idcard, CONCAT(titleName, firstName) AS firstName, lastName, accActive FROM ".$mssql_db_user.".dbo.trmember
+$back_sql = $sql->prepare("SELECT member_id, idcard, email, CONCAT(titleName, firstName) AS firstName, lastName, accActive FROM ".$mssql_db_user.".dbo.trmember
 WHERE authority = :auth");
 $back_sql->BindParam(":auth", $auth);
 $back_sql->execute();
