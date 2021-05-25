@@ -9,7 +9,7 @@ $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
-$back_sql = $sql->prepare("SELECT * FROM ".$mssql_db_user.".dbo.trmenu WHERE menuRole = :role");
+$back_sql = $sql->prepare("SELECT menuName, menuLink, menuPrice, menuId FROM ".$mssql_db_user.".dbo.trmenu WHERE menuRole = :role");
 $back_sql->BindParam(":role", $role);
 $back_sql->execute();
 while($back = $back_sql->fetch(PDO::FETCH_ASSOC)) {

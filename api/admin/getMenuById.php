@@ -5,7 +5,7 @@ include("../../configuration/config.php");
 
 $menuId = $_GET['menuId'];
 
-$back_sql = $sql->prepare("SELECT * FROM ".$mssql_db_user.".dbo.trmenu WHERE menuId = :id");
+$back_sql = $sql->prepare("SELECT menuName, menuLink, menuPrice, menuId FROM ".$mssql_db_user.".dbo.trmenu WHERE menuId = :id");
 $back_sql->BindParam(":id", $menuId);
 $back_sql->execute();
 $back = $back_sql->fetch(PDO::FETCH_ASSOC);

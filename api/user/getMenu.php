@@ -18,7 +18,7 @@ $auth = $auth_sql->fetch(PDO::FETCH_ASSOC);
 if($auth) {
     // GET Menu
     if($auth['authority'] == "Admin") {
-        $menu_sql = $sql->prepare("SELECT * FROM trmenu WHERE trmenu.menuRole != 'System'");
+        $menu_sql = $sql->prepare("SELECT menuName, menuLink, menuPrice, menuId FROM trmenu");
         $menu_sql->execute();
         while($menu = $menu_sql->fetch(PDO::FETCH_ASSOC)) {
             $return['value'][] = $menu;
@@ -27,7 +27,7 @@ if($auth) {
         echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit();
     } else {
-        $menu_sql = $sql->prepare("SELECT trmenu.* FROM trmenu INNER JOIN trmenuactive ON trmenu.menuId = trmenuactive.menuId AND trmenuactive.member_id = :memid AND trmenu.menuRole != 'System' ORDER BY menuId");
+        $menu_sql = $sql->prepare("SELECT trmenu.menuName, trmenu.menuLink, trmenu.menuPrice, trmenu.menuId FROM trmenu INNER JOIN trmenuactive ON trmenu.menuId = trmenuactive.menuId AND trmenuactive.member_id = :memid AND trmenu.menuRole != 'Admin' ORDER BY menuId");
         $menu_sql->BindParam(":memid", $member);
         $menu_sql->execute();
         while($menu = $menu_sql->fetch(PDO::FETCH_ASSOC)) {

@@ -5,7 +5,9 @@ include("../../configuration/config.php");
 
 $membId = $_GET['membId'];
 
-$back_sql = $sql->prepare("SELECT * FROM ".$mssql_db_user.".dbo.trmember WHERE member_id = :mem");
+$back_sql = $sql->prepare("SELECT  member_id, email, password,
+authority, credit, emailActive, titleName, firstName, lastname, idcard,
+telephone, createDate, updateDate  FROM ".$mssql_db_user.".dbo.trmember WHERE member_id = :mem");
 $back_sql->BindParam(":mem", $membId);
 $back_sql->execute();
 $back = $back_sql->fetch(PDO::FETCH_ASSOC);

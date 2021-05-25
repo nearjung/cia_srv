@@ -3,8 +3,8 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
 
-$memberId = $api->getMember($_GET['memberId'], $_GET['password'], "member_id");
-$credit = $api->getMember($_GET['memberId'], $_GET['password'], "credit");
+$memberId = $api->getMember($_GET['memberId'], $_GET['password'], "MEMBER_ID");
+$credit = $api->getMember($_GET['memberId'], $_GET['password'], "CREDIT");
 $price = $api->getMenu(4, "menuPrice");
 $plate1 = $_GET['plate1'];
 $plate2 = $_GET['plate2'];

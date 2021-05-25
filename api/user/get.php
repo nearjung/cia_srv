@@ -11,7 +11,9 @@ $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
-$back_sql = $sql->prepare("SELECT * FROM ".$mssql_db_user.".dbo.trmember WHERE email = :email AND password = :pass");
+$back_sql = $sql->prepare("SELECT member_id, email, password,
+authority, credit, emailActive, titleName, firstName, lastname, idcard,
+telephone, createDate, updateDate FROM ".$mssql_db_user.".dbo.trmember WHERE email = :email AND password = :pass");
 $back_sql->BindParam(":email", $email);
 $back_sql->BindParam(":pass", $password);
 $back_sql->execute();

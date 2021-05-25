@@ -5,14 +5,16 @@ include("../../configuration/config.php");
 
 $membId = $_GET['membId'];
 $searchTxt = $_GET['searchTxt'];
+$mode = $_GET['mode'];
 
 $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
 // Query Back
-$back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.companySearch2 :searchTxt");
+$back_sql = $sql->prepare("EXEC ".$mssql_db_info.".dbo.companySearch :searchTxt, :mode");
 $back_sql->BindParam(":searchTxt", $searchTxt);
+$back_sql->BindParam(":mode", $mode);
 $back_sql->execute();
 while($back = $back_sql->fetch(PDO::FETCH_ASSOC)) {
     $return['value'][] = $back;

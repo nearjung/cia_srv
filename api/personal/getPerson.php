@@ -3,8 +3,8 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
 
-$memberId = $api->getMember($_GET['memberId'], $_GET['password'], "member_id");
-$credit = $api->getMember($_GET['memberId'], $_GET['password'], "credit");
+$memberId = $api->getMember($_GET['memberId'], $_GET['password'], "MEMBER_ID");
+$credit = $api->getMember($_GET['memberId'], $_GET['password'], "CREDIT");
 $idcard = $_GET['idCard'];
 $price = $api->getMenu(2, "menuPrice");
 if ($memberId == false) {
@@ -15,6 +15,7 @@ if ($memberId == false) {
         'text' => "Error: Invalid user."
     );
     echo json_encode($return);
+    exit();
 } else if ($credit < $price) {
     $return = array(
         'id' => $memberId,
@@ -23,32 +24,11 @@ if ($memberId == false) {
         'text' => "Error: Enough credit."
     );
     echo json_encode($return);
+    exit();
 } else {
     if ($idcard) {
         // Search
-        $back_sql = $sql->prepare("SELECT [IDCard]
-        ,[Gender]
-        ,[HouseNo]
-        ,[Moo]
-        ,[Trok]
-        ,[Soi]
-        ,[Street]
-        ,[Subdistrict]
-        ,[District]
-        ,[Province]
-        ,[AreaD]
-        ,[CTitle]
-        ,[CFname]
-        ,[CLname]
-        ,[PostalCode]
-        ,[BYear]
-        ,[BMonth]
-        ,[BDay]
-        ,[AgeCheck]
-        ,[CMName]
-        ,[DOB]
-        ,[Remarks2]
-        FROM " . $tbl["census"] . " WHERE IDCard = :idcard");
+        $back_sql = $sql->prepare("EXEC " . $mssql_db_user . ".dbo.getCensusInfo :idcard");
         $back_sql->BindParam(":idcard", $idcard);
         $back_sql->execute();
         $back = $back_sql->fetch(PDO::FETCH_ASSOC);
@@ -80,10 +60,7 @@ if ($memberId == false) {
             $ssdb = $ssdb_sql->fetch(PDO::FETCH_ASSOC);
             $return['value']['working'] = $ssdb;
             $api->sendLogUser($memberId, $api->logData('ดูข้อมูลบุคคล', 'ดูข้อมูลบุคคล : ' . $idcard . ''));
-            $api->sendLogUser($memberId, $api->logData('เครดิต', 'ถูกหักเครดิตจำนวน : ' . $price . ''));
-            if($api->creditManage("reduce", $price, $memberId) == true) {
-                echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            }
+            echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } else {
             $return = array(
                 'id' => $memberId,
