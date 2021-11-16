@@ -4,18 +4,19 @@ header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
 
 $email = $_GET['email'];
-$password = md5(sha1($_GET['password']));
+$password = substr(md5(sha1($_GET['password'])), 0, 19);
 
-
+$active = 'Y';
 $return['id'] = '';
 $return['code'] = 200;
 $return['status'] = "Success";
 $return['text'] = "Load Success.";
 $back_sql = $sql->prepare("SELECT member_id, email, password,
-authority, credit, emailActive, titleName, firstName, lastname, idcard,
-telephone, createDate, updateDate, token, tokenexpire FROM trmember WHERE email = :email AND password = :pass");
+authority, credit, emailActive, titleName, firstName, lastname, idcard, accActive,
+telephone, createDate, updateDate, token, tokenexpire FROM trmember WHERE email = :email AND password = :pass AND active = :active");
 $back_sql->BindParam(":email", $email);
 $back_sql->BindParam(":pass", $password);
+$back_sql->BindParam(":active", $active);
 $back_sql->execute();
 $back = $back_sql->fetch(PDO::FETCH_ASSOC);
 if($back) {

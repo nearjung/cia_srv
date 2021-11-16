@@ -94,10 +94,9 @@ if ($memberId == false) {
 
     // Insert Log Files name
     $date = date("d/m/Y");
-    $log_sql = $sql->prepare("INSERT INTO trlogexport(filesName, account, exportDate) VALUES(:fileName, :account, :exportDate)");
+    $log_sql = $sql->prepare("INSERT INTO trlogexport(filesName, account) VALUES(:fileName, :account)");
     $log_sql->BindParam(":fileName", $filesDirectory);
     $log_sql->BindParam(":account", $memberId);
-    $log_sql->BindParam(":exportDate", $date);
     $log_sql->execute();
 
     $return['comment'] = "";

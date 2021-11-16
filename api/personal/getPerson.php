@@ -2,83 +2,73 @@
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
+$postdata = file_get_contents("php://input");
 
-$memberId = $api->getMember($_GET['memberId'], $_GET['password'], "MEMBER_ID");
-$credit = $api->getMember($_GET['memberId'], $_GET['password'], "CREDIT");
-$idcard = $_GET['idCard'];
-$price = $api->getMenu(2, "menuPrice");
-if ($memberId == false) {
-    $return = array(
-        'id' => $memberId,
-        'code' => 500,
-        'status' => "Error",
-        'text' => "Error: Invalid user."
-    );
-    echo json_encode($return);
-    exit();
-} else if ($credit < $price) {
-    $return = array(
-        'id' => $memberId,
-        'code' => 500,
-        'status' => "Credit",
-        'text' => "Error: Enough credit."
-    );
-    echo json_encode($return);
-    exit();
-} else {
-    if ($idcard) {
-        // Search
-        $back_sql = $sql->prepare("EXEC " . $mssql_db_user . ".dbo.getCensusInfo :idcard");
-        $back_sql->BindParam(":idcard", $idcard);
-        $back_sql->execute();
-        $back = $back_sql->fetch(PDO::FETCH_ASSOC);
-        if ($back) {
+
+if (isset($postdata) && !empty($postdata)) {
+    $post = json_decode($postdata);
+    $memberId = $api->getMember($post->memberId, $post->password, "MEMBER_ID");
+    $credit = $api->getMember($post->memberId, $post->password, "CREDIT");
+    $obj = $post->obj;
+    $price = $api->getMenu(2, "menuPrice");
+    if ($memberId == false) {
+        $return = array(
+            'id' => $memberId,
+            'code' => 500,
+            'status' => "Error",
+            'text' => "Error: Invalid user."
+        );
+        echo json_encode($return);
+        exit();
+    } else if ($credit < $price) {
+        $return = array(
+            'id' => $memberId,
+            'code' => 500,
+            'status' => "Credit",
+            'text' => "Error: Enough credit."
+        );
+        echo json_encode($return);
+        exit();
+    } else {
+        if ($obj) {
+            // Search
+            $result = array();
+            if (sizeof($obj) > 0) {
+                for ($i = 0; $i < sizeof($obj); $i++) {
+                    $back_sql = $sql->prepare("EXEC " . $mssql_db_user . ".dbo.getCensusInfo :idcard");
+                    $back_sql->BindParam(":idcard", $obj[$i]->IDCard);
+                    $back_sql->execute();
+                    $back = $back_sql->fetch(PDO::FETCH_ASSOC);
+                    if ($back) {
+                        array_push($result, $back);
+                    } else {
+                        $return = array(
+                            'id' => $memberId,
+                            'code' => 500,
+                            'status' => "Error",
+                            'text' => "Error: Data return."
+                        );
+                        echo json_encode($return);
+                        exit();
+                    }
+                }
+            }
+
             $return['id'] = $memberId;
             $return['code'] = 200;
             $return['status'] = "Success";
             $return['text'] = "Load Success.";
-            $return['value'] = $back;
-            // Get Vehicle
-            $vehicle_sql = $sql->prepare("SELECT ACQ_ID, BRAND_D, MODEL, PLATE1, PLATE2, OFF_PROV_D, NUM_BODY, NUM_ENG FROM " . $tbl["carall"] . " WHERE ACQ_ID = :idcard");
-            $vehicle_sql->BindParam(":idcard", $idcard);
-            $vehicle_sql->execute();
-            while ($vehicle = $vehicle_sql->fetch(PDO::FETCH_ASSOC)) {
-                $return['value']['vehicle'][] = $vehicle;
-            }
-
-            // Get Customer Data
-            $customer_sql = $sql->prepare("SELECT MobilePhone, HomePhone, EMAIL, EducationLevelThaiDesc FROM " . $tbl["customer"] . " WHERE IDCARDNO = :idcard");
-            $customer_sql->BindParam(":idcard", $idcard);
-            $customer_sql->execute();
-            $customer = $customer_sql->fetch(PDO::FETCH_ASSOC);
-            $return['value']['customer'] = $customer;
-
-            // Working Data
-            $ssdb_sql = $sql->prepare("SELECT emp_date, company, address1, address2, address3, addressprovince, addresspostal FROM " . $tbl["SSDB"] . " WHERE idcard = :idcard");
-            $ssdb_sql->BindParam(":idcard", $idcard);
-            $ssdb_sql->execute();
-            $ssdb = $ssdb_sql->fetch(PDO::FETCH_ASSOC);
-            $return['value']['working'] = $ssdb;
-            $api->sendLogUser($memberId, $api->logData('ดูข้อมูลบุคคล', 'ดูข้อมูลบุคคล : ' . $idcard . ''));
+            $return['value'] = $result;
             echo json_encode($return, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } else {
             $return = array(
                 'id' => $memberId,
                 'code' => 500,
                 'status' => "Error",
-                'text' => "Error: Data return."
+                'text' => "Error: Data"
             );
             echo json_encode($return);
             exit();
         }
-    } else {
-        $return = array(
-            'id' => $memberId,
-            'code' => 500,
-            'status' => "Error",
-            'text' => "Error: Data"
-        );
-        echo json_encode($return);
-        exit();
     }
 }

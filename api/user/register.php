@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 include("../../configuration/config.php");
 
 $email = $_GET['email'];
-$pass = md5(sha1($_GET['password']));
+$pass = substr(md5(sha1($_GET['password'])), 0, 19);
 $titleName = $_GET['titleName'];
 $fullName = $_GET['fullName'];
 $idCard = $_GET['idCard'];
@@ -15,6 +15,18 @@ $credit = $_GET['credit'];
 $name = explode(" ", $fullName);
 $auth = "Memb";
 $createDate = date("Y-m-d H:i:s");
+
+if(!preg_match("/^[a-zA-Z0-9@]+$/", $_GET['password']) == 1 || !preg_match("/^[a-zA-Z0-9@]+$/", $_GET['email']) == 1) {
+    $return = array(
+        'id' => '',
+        'code' => 500,
+        'status' => "Error",
+        'text' => "Can use only a-Z and 0-9 !"
+    );
+    echo json_encode($return);
+    exit();
+}
+
 // Check 
 $chk_sql = $sql->prepare("SELECT email FROM ".$mssql_db_user.".dbo.trmember WHERE email = :email");
 $chk_sql->BindParam(":email", $email);
